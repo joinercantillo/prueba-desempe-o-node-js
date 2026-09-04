@@ -247,18 +247,10 @@ curl -X POST http://localhost:3000/api/orders \
 - Branches: `main`, `develop`, `feature/<desc>`.
 - Mensajes de commit: usar Conventional Commits, por ejemplo: `feat(clients): add search by cedula` o `fix(orders): validate stock before create`.
 
-**Pruebas (opcional)**
-- Se pueden agregar pruebas con Jest. No incluidas en esta versión inicial.
 
 **Contacto / Autor**
 - Nombre: Joiner Cantillo Camargo
 - Clan: clan 11 - Centurion RUTA AVANZADA nodejs + nestjs
-
-
-
-Si deseas, puedo:
-- Ejecutar `npm install` y `npm run seed` aquí mismo para poblar la BD, o
-- Añadir pruebas unitarias y mejorar la documentación Swagger con esquemas y ejemplos.
 
 **Dump SQL para Moodle**
 

@@ -28,6 +28,10 @@ async function seed() {
     await Product.create({ code: 'P001', name: 'Productito Aguado', stock: 100, warehouseId: w1.id });
     await Product.create({ code: 'P002', name: 'Productito Bolsitas', stock: 50, warehouseId: w1.id });
     await Product.create({ code: 'P003', name: 'Productito Carga pesada', stock: 200, warehouseId: w2.id });
+    await Product.create({ code: 'P004', name: 'Productito Carga ancha', stock: 200, warehouseId: w2.id });
+    await Product.create({ code: 'P005', name: 'Productito listones', stock: 200, warehouseId: w1.id });
+    await Product.create({ code: 'P006', name: 'Productito librito', stock: 200, warehouseId: w1.id });
+    await Product.create({ code: 'P007', name: 'Productito Carga larga', stock: 200, warehouseId: w2.id });
 
     console.log('Seed completed');
     process.exit(0);
