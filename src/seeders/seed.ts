@@ -17,15 +17,17 @@ async function seed() {
     await User.create({ name: 'Admin', email: 'admin@fhl.com', password: pass, role: 'admin' });
     await User.create({ name: 'Analyst', email: 'analyst@fhl.com', password: pass, role: 'analyst' });
 
-    const client1 = await Client.create({ cedula: '12345678', name: 'Cliente 1', email: 'cliente1@example.com' });
-    const client2 = await Client.create({ cedula: '87654321', name: 'Cliente 2', email: 'cliente2@example.com' });
+    const client1 = await Client.create({ cedula: '12345678', name: 'Juancho', email: 'lirio322222@example.com' });
+    const client2 = await Client.create({ cedula: '87654321', name: 'Polo', email: 'listeilor@example.com' });
+    const client3 = await Client.create({ cedula: '12355678', name: 'Valencia', email: 'seiya432@example.com' });
+    const client4 = await Client.create({ cedula: '876544321', name: 'Cassiani', email: 'juanchopolo33@example.com' });
 
-    const w1 = await Warehouse.create({ name: 'Bodega Norteña', active: true });
-    const w2 = await Warehouse.create({ name: 'Bodega Surerña', active: true });
+    const w1 = await Warehouse.create({ name: 'Bodega Norteñita', active: true });
+    const w2 = await Warehouse.create({ name: 'Bodega Costeñita', active: true });
 
-    await Product.create({ code: 'P001', name: 'Productito A', stock: 100, warehouseId: w1.id });
-    await Product.create({ code: 'P002', name: 'Productito B', stock: 50, warehouseId: w1.id });
-    await Product.create({ code: 'P003', name: 'Productito C', stock: 200, warehouseId: w2.id });
+    await Product.create({ code: 'P001', name: 'Productito Aguado', stock: 100, warehouseId: w1.id });
+    await Product.create({ code: 'P002', name: 'Productito Bolsitas', stock: 50, warehouseId: w1.id });
+    await Product.create({ code: 'P003', name: 'Productito Carga pesada', stock: 200, warehouseId: w2.id });
 
     console.log('Seed completed');
     process.exit(0);

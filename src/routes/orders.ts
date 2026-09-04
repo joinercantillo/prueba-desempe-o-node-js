@@ -57,7 +57,7 @@ router.post('/', authenticate, authorize(['admin']), async (req, res) => {
     const product = await Product.findByPk(it.productId);
     if (!product || product.deleted) return res.status(400).json({ message: 'Product invalid' });
     if (product.warehouseId !== warehouseId) return res.status(400).json({ message: 'Product not in warehouse' });
-    if (product.stock < it.quantity) return res.status(400).json({ message: `Insufficient stock for product ${product.code}` });
+    if (product.stock < it.quantity) return res.status(400).json({ message: `Insufficient stock for product ${product.name}` });
   }
 
   const order = await Order.create({ clientId, warehouseId, status: 'pending' });

@@ -1,14 +1,24 @@
-#!/bin/sh
-# Kill any process listening on PORT (default 3001) and start dev server
+#!/usr/bin/env sh
+set -e
+
+# Cargar variables de entorno desde .env si existe
+[ -f .env ] && export $(grep -v '^#' .env | xargs) || true
+
 PORT=${PORT:-3001}
-# find PIDs listening on PORT and kill
-PIDS=$(lsof -t -iTCP:${PORT} -sTCP:LISTEN -Pn || true)
-if [ -n "$PIDS" ]; then
-  echo "Killing processes on port ${PORT}: $PIDS"
-  kill $PIDS || kill -9 $PIDS || true
-  sleep 1
+
+echo "Releasing port $PORT if already in use..."
+# Intentar matar proceso que escucha en el puerto (lsof o ss)
+PID="$(lsof -t -i :$PORT -sTCP:LISTEN -Pn 2>/dev/null || true)"
+if [ -z "$PID" ]; then
+  PID="$(ss -ltnp 2>/dev/null | awk -v p=:$PORT '$4~p{gsub(/.*pid=/,"",$0); gsub(/,.*/,"",$0); print $0; exit}')"
 fi
-# Kill any ts-node-dev leftover
+if [ -n "$PID" ]; then
+  echo "Killing process on port $PORT: $PID"
+  kill $PID || kill -9 $PID || true
+fi
+
+echo "Killing leftover ts-node-dev processes (if any)"
 pkill -f ts-node-dev || true
-# Start dev server
-exec ts-node-dev --respawn --transpile-only src/index.ts
+
+echo "Starting development server with ts-node-dev"
+exec npx ts-node-dev --respawn --transpile-only src/index.ts
