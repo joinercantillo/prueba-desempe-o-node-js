@@ -5,6 +5,8 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import routes from './routes';
 import { sequelize } from './config/database';
+// Import models to ensure associations are configured
+import './models';
 
 const app = express();
 
@@ -29,12 +31,26 @@ sequelize
 const swaggerSpec = swaggerJsdoc({
   definition: {
     openapi: '3.0.0',
-    info: { title: 'FHL Delivery API', version: '1.0.0' }
+    info: { title: 'FHL Delivery API', version: '1.0.0' },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT'
+        }
+      }
+    }
   },
   apis: ['./src/routes/*.ts']
 });
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// Expose raw OpenAPI JSON for tools (e.g., Postman, CLI)
+app.get('/api-docs.json', (req, res) => {
+  res.json(swaggerSpec);
+});
 
 app.use('/api', routes);
 

@@ -4,12 +4,49 @@ import { authenticate } from '../middlewares/auth';
 
 const router = Router();
 
+/**
+ * @openapi
+ * /api/clients:
+ *   get:
+ *     summary: Listar clientes
+ *     tags:
+ *       - Clients
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de clientes
+ */
 // List all clients (protected)
 router.get('/', authenticate, async (req, res) => {
   const clients = await Client.findAll();
   res.json(clients);
 });
 
+/**
+ * @openapi
+ * /api/clients/search:
+ *   post:
+ *     summary: Buscar cliente por cédula
+ *     tags:
+ *       - Clients
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               cedula:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Cliente encontrado
+ *       404:
+ *         description: No encontrado
+ */
 // Find client by cedula
 router.post('/search', authenticate, async (req, res) => {
   const { cedula } = req.body;
@@ -19,6 +56,32 @@ router.post('/search', authenticate, async (req, res) => {
   res.json(client);
 });
 
+/**
+ * @openapi
+ * /api/clients:
+ *   post:
+ *     summary: Crear cliente (admin)
+ *     tags:
+ *       - Clients
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               cedula:
+ *                 type: string
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Cliente creado
+ */
 // Admin: create client
 router.post('/', authenticate, async (req, res) => {
   const { cedula, name, email } = req.body;

@@ -4,10 +4,11 @@
   "description": "API REST para gestión de órdenes de entrega - Prueba de desempeño",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "dev": "sh ./scripts/start-dev.sh",
     "build": "tsc",
     "start": "node dist/index.js",
     "seed": "ts-node src/seeders/seed.ts",
+    "dump": "sh ./scripts/generate-dump.sh",
     "lint": "eslint . --ext .ts",
     "prepare": "npm run build"
   },

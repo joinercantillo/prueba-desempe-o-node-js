@@ -129,7 +129,14 @@ npm start
 
 6) Acceder a la API
 
-La API estará disponible en `http://localhost:3000` por defecto.
+La API estará disponible en `http://localhost:3000` por defecto cuando se ejecute en Docker, o en `http://localhost:3001` cuando se ejecute en modo desarrollo local con `npm run dev`.
+
+Notas sobre puertos (este repositorio usa puertos alternativos para evitar conflictos en el host):
+
+- Docker Compose mapea:
+	- Postgres: host `5434` -> container `5432` (use `DATABASE_URL=postgres://postgres:postgres@localhost:5434/fhldb` para acceder desde el host)
+	- API: host `3002` -> container `3000` (acceso vía http://localhost:3002)
+- Desarrollo local (npm run dev) usa `PORT` desde `.env` — por defecto `3001` en este proyecto.
 
 Consejos útiles:
 - Para cambiar la versión de Node use `nvm install <version>` y `nvm use <version>`.
@@ -166,7 +173,9 @@ Incluye ese archivo `.sql` en la entrega para Moodle.
 Cuando la API esté corriendo, la documentación está disponible en:
 
 ```
-http://localhost:3000/api-docs
+http://localhost:3002/api-docs  # (cuando usas Docker Compose)
+
+Si ejecutas la API en modo desarrollo local (`npm run dev`) la UI estará en `http://localhost:3001/api-docs`.
 ```
 
 **Rutas principales y permisos**
@@ -242,9 +251,33 @@ curl -X POST http://localhost:3000/api/orders \
 - Se pueden agregar pruebas con Jest. No incluidas en esta versión inicial.
 
 **Contacto / Autor**
-- Nombre: Coder - Nombre
-- Clan: Clan
+- Nombre: Joiner Cantillo Camargo
+- Clan: clan 11 - Centurion RUTA AVANZADA nodejs + nestjs
+
+
 
 Si deseas, puedo:
 - Ejecutar `npm install` y `npm run seed` aquí mismo para poblar la BD, o
 - Añadir pruebas unitarias y mejorar la documentación Swagger con esquemas y ejemplos.
+
+**Dump SQL para Moodle**
+
+El entregable para Moodle debe incluir un volcado SQL (`.sql`) con la estructura y datos usados en la prueba. Hay dos opciones recomendadas:
+
+- Generar el volcado desde el host con `pg_dump` (si la base de datos está en Docker o local). Ejemplo:
+
+```bash
+# Dump en formato SQL plano (recomendado para Moodle)
+pg_dump -h localhost -p 5434 -U postgres -d fhldb > moodle_dump/fhldb.sql
+
+# o con puerto por defecto 5432
+pg_dump -h localhost -p 5432 -U postgres -d fhldb > moodle_dump/fhldb.sql
+```
+
+- Usar el script incluido (`npm run dump`) que invoca `pg_dump` usando `DATABASE_URL` de tu `.env` y escribe `moodle_dump/fhldb.sql`.
+
+Notas:
+- Asegúrate de que la base de datos que estés volcándo contiene los datos del `seed` (ejecuta `npm run seed` primero si corresponde).
+- Incluye el archivo resultante `moodle_dump/fhldb.sql` en el ZIP/subida a Moodle.
+
+La carpeta `moodle_dump/` se usa por convención para almacenar el volcado listo para subir.

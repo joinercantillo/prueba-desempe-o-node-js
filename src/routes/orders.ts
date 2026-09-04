@@ -8,6 +8,41 @@ import { Warehouse } from '../models/Warehouse';
 
 const router = Router();
 
+/**
+ * @openapi
+ * /api/orders:
+ *   post:
+ *     summary: Crear una orden (admin)
+ *     tags:
+ *       - Orders
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               clientId:
+ *                 type: integer
+ *               warehouseId:
+ *                 type: integer
+ *               items:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     productId:
+ *                       type: integer
+ *                     quantity:
+ *                       type: integer
+ *     responses:
+ *       201:
+ *         description: Orden creada
+ *       400:
+ *         description: Datos inválidos
+ */
 // Create order
 router.post('/', authenticate, authorize(['admin']), async (req, res) => {
   const { clientId, warehouseId, items } = req.body; // items: [{ productId, quantity }]
@@ -39,6 +74,37 @@ router.post('/', authenticate, authorize(['admin']), async (req, res) => {
   res.status(201).json(order);
 });
 
+/**
+ * @openapi
+ * /api/orders/{id}/status:
+ *   patch:
+ *     summary: Cambiar estado de la orden (admin, analyst)
+ *     tags:
+ *       - Orders
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum: [pending, in_transit, delivered]
+ *     responses:
+ *       200:
+ *         description: Orden actualizada
+ *       404:
+ *         description: No encontrada
+ */
 // Change order status (admin + analyst can update status)
 router.patch('/:id/status', authenticate, authorize(['admin', 'analyst']), async (req, res) => {
   const id = Number(req.params.id);
@@ -51,12 +117,44 @@ router.patch('/:id/status', authenticate, authorize(['admin', 'analyst']), async
   res.json(order);
 });
 
+/**
+ * @openapi
+ * /api/orders/history:
+ *   get:
+ *     summary: Historial de órdenes
+ *     tags:
+ *       - Orders
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de órdenes
+ */
 // Get history of orders
 router.get('/history', authenticate, async (req, res) => {
   const orders = await Order.findAll({ include: [{ model: OrderItem, as: 'items' }] });
   res.json(orders);
 });
 
+/**
+ * @openapi
+ * /api/orders/client/{clientId}:
+ *   get:
+ *     summary: Órdenes por cliente
+ *     tags:
+ *       - Orders
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: clientId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Lista de órdenes del cliente
+ */
 // Get orders by client
 router.get('/client/:clientId', authenticate, async (req, res) => {
   const clientId = Number(req.params.clientId);
