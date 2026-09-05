@@ -1,106 +1,98 @@
 # FHL Delivery API
 
-API REST para la gestión de órdenes de entrega (Prueba de desempeño - Módulo 5.2 Node.js).
+API REST for the managment of delivery orders prueba de desempeño nodeJs - Cohorte 5
 
-**Resumen**: Esta API permite registrar clientes, gestionar bodegas y productos, crear órdenes de entrega, asignarlas a bodegas, controlar su estado y consultar el historial por cliente. Autenticación basada en JWT con roles `admin` y `analyst`.
+**Resumen**: This API allows to register clients, gestionar warehouses and products, make delivery orders, asing to a warehouses, controller the statatus and queryest the history for all clients. Autentication based on JWT with rols `admin` and `analyst`.
 
-**Requisitos**
+**Requuest**
 - Node.js >= 18
-- PostgreSQL (local o vía Docker Compose)
+- PostgreSQL (local or using Docker Compose)
 
-**Archivos importantes**
-- `src/` : código fuente TypeScript.
-- `src/models` : modelos Sequelize.
-- `src/routes` : rutas Express (auth, clients, products, warehouses, orders).
-- `.env.example` : ejemplo de variables de entorno.
+**important warnings**
+- `src/` : base code TypeScript.
+- `src/models` : Sequelize models.
+- `src/routes` : express routes (auth, clients, products, warehouses, orders).
+- `.env.example` : exmaple for environment variables.
 - `docker-compose.yml` : orquesta API + Postgres.
 
-**Variables de entorno (ejemplo)**
-Copiar `.env.example` a `.env` y ajustar si es necesario.
+**environment variables (example)**
+Copy `.env.example` a `.env` and adjust if you need this.
 
 ```
 PORT=3000
 DATABASE_URL=postgres://postgres:postgres@db:5432/fhldb
-JWT_SECRET=supersecretkey
+JWT_SECRET=123456
 ```
 
-**Instalación de dependencias y ejecución (local)**
+**installation and dev dependencies (local)**
 
-Requisitos previos:
-- Node.js >= 18 (recomendado usar `nvm` para gestionar versiones)
+Previous request:
+- Node.js >= 18 (is recomended use `nvm` to manage node versions)
 - npm, yarn o pnpm
-- PostgreSQL (local) o Docker (se incluye `docker-compose.yml`)
+- PostgreSQL (local) or Docker (in this project i'm incluided `docker-compose.yml` file)
 
-1) Clonar el repositorio (si aplica):
+1) CLone this repository (if is your first time using this app):
 
 ```bash
-git clone <repo-url>
+git clone <https://github.com/joinercantillo/prueba-desempe-o-node-js>
 cd prueba_desempeño_nodejs
 ```
 
-2) Instalar dependencias (elige uno):
+2) Install dependencies:
 
 ```bash
 # Con npm
 npm install
 
-# Con yarn
-yarn install
-
-# Con pnpm
-pnpm install
 ```
 
-3) Configurar variables de entorno:
+3) configure the enviroment variables:
 
 ```bash
 cp .env.example .env
-# Edita .env según tu entorno (DATABASE_URL, JWT_SECRET, PORT...)
+# Edit .env in acord of your enviroment (DATABASE_URL, JWT_SECRET, PORT...)
 ```
 
-**Configurar `.env` y la base de datos**
+**Configure `.env` and data bases**
 
-`DATABASE_URL` debe tener el formato: `postgres://<user>:<password>@<host>:<port>/<database>`.
-Ejemplos recomendados:
+`DATABASE_URL` is request the format: `postgres://<user>:<password>@<host>:<port>/<database>`.
+Examples recomended:
 
 ```bash
-# Postgres local con usuario y contraseña por defecto (recomendado para desarrollo)
+# Postgres local with user and password by default 
 DATABASE_URL=postgres://postgres:postgres@localhost:5432/fhldb
 
-# Si usas Docker Compose y el servicio de Postgres se llama 'db'
+# if you uses Docker Compose and Postgres services is called 'db'
 DATABASE_URL=postgres://postgres:postgres@db:5432/fhldb
 
-# Si tu Postgres local usa autenticación peer (sin contraseña)
-DATABASE_URL=postgres://postgres@localhost:5432/fhldb
 ```
 
-Cómo preparar Postgres local (Ubuntu / Debian):
+How to prepare local postgres (Ubuntu):
 
 ```bash
-# Asegúrate de tener Postgres instalado
+# If you have istalled postgres on your device
 sudo apt update && sudo apt install -y postgresql
 
-# Establecer contraseña para el usuario 'postgres' (opcional)
+# Chose a password for the user 'postgres' (optional)
 sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres';"
 
-# Crear la base de datos requerida
+# Create the database
 sudo -u postgres createdb fhldb
 ```
 
-Si prefieres usar Docker Compose (archivo incluido):
+if you prefer Docker Compose (incluided file):
 
 ```bash
-# Levanta los contenedores (puede requerir sudo si tu usuario no está en el grupo docker)
+# Up the containers 
 sudo docker-compose up -d --build
 
-# Alternativa (agrega tu usuario al grupo docker y vuelve a iniciar sesión):
 sudo usermod -aG docker $USER
-# cierra sesión y vuelve a entrar para aplicar el cambio
+
 ```
 
-Si al ejecutar `docker-compose` obtienes "permission denied" para `/var/run/docker.sock`, usa `sudo` o añade tu usuario al grupo `docker`.
+if to excecute `docker-compose` you see the message "permission denied" for `/var/run/docker.sock`, use `sudo` or add your user to the team `docker`.
 
-Después de preparar la base de datos, ejecuta el seeder:
+After that prepare the database, execute the seeder.
 
 ```bash
 npm run seed
@@ -114,99 +106,96 @@ npm run seed
 npm run seed
 ```
 
-5) Ejecutar la API en desarrollo o producción:
+5) Execute the api
 
 ```bash
-# Modo desarrollo (recarga automática)
+
 npm run dev
 
-# Compilar TypeScript
+# Compile typescript
 npm run build
 
-# Ejecutar versión compilada
+# Execute complete version
 npm start
 ```
 
-6) Acceder a la API
+6) Access to the api
 
-La API estará disponible en `http://localhost:3000` por defecto cuando se ejecute en Docker, o en `http://localhost:3001` cuando se ejecute en modo desarrollo local con `npm run dev`.
+The api is aviable on `http://localhost:3000` by default when you exceute the docker, or in `http://localhost:3001` hwen you run this api in local mode using  `npm run dev`.
 
-Notas sobre puertos (este repositorio usa puertos alternativos para evitar conflictos en el host):
 
 - Docker Compose mapea:
 	- Postgres: host `5434` -> container `5432` (use `DATABASE_URL=postgres://postgres:postgres@localhost:5434/fhldb` para acceder desde el host)
 	- API: host `3002` -> container `3000` (acceso vía http://localhost:3002)
 - Desarrollo local (npm run dev) usa `PORT` desde `.env` — por defecto `3001` en este proyecto.
 
-Consejos útiles:
-- Para cambiar la versión de Node use `nvm install <version>` y `nvm use <version>`.
-- Si usas Docker, la forma más sencilla es usar `docker-compose up --build` (ver sección "Con Docker").
-- Para revisar y corregir linter: `npm run lint`.
+Hints:
+- To change the node version use `nvm install <version>` and `nvm use <version>`.
+- if you uses docker, the most simplest way is `docker-compose up --build`.
+- To review and fix linter: `npm run lint`.
 
 **Con Docker (opcional)**
-Levanta Postgres y la API con Docker Compose:
+Up the Postgres and the API with Docker Compose:
 
 ```bash
 docker-compose up --build
 ```
 
-La cadena de conexión por defecto en `docker-compose.yml` es `postgres://postgres:postgres@db:5432/fhldb`.
+the supply chain by default in docker `docker-compose.yml` is `postgres://postgres:postgres@db:5432/fhldb`.
 
 **Seed y volcado de la BD**
-- El script `npm run seed` recrea las tablas y carga usuarios, clientes, bodegas y productos de ejemplo.
+- The script `npm run seed` recreate the tables and load all users, clients, warehouses and products for test that aplication.
 - Para generar un dump SQL para entrega (archivo .sql):
 
 ```bash
-# desde el host, si la base está en Docker
+# if the database is in docker use this code
 pg_dump -h localhost -p 5432 -U postgres -Fc -d fhldb > fhldb.dump
 ```
 
-O bien usar `pg_dump` para generar SQL plano:
+Or use `pg_dump` to generate SQL plain text:
 
 ```bash
 pg_dump -h localhost -p 5432 -U postgres -d fhldb > fhldb.sql
 ```
 
-Incluye ese archivo `.sql` en la entrega para Moodle.
-
 **Documentación (Swagger/OpenAPI)**
-Cuando la API esté corriendo, la documentación está disponible en:
+When the api i running, the documentation is aviable on:
 
 ```
-http://localhost:3002/api-docs  # (cuando usas Docker Compose)
+http://localhost:3002/api-docs  # (when you uses docker compose)
 
-Si ejecutas la API en modo desarrollo local (`npm run dev`) la UI estará en `http://localhost:3001/api-docs`.
+if you uses that api in your local place use (`npm run dev`) and the UI is in `http://localhost:3001/api-docs`.
 ```
 
-**Rutas principales y permisos**
-- `POST /api/auth/register` — Registrar usuario (`name`, `email`, `password`, `role`)
-- `POST /api/auth/login` — Login -> devuelve `token`
+**Main routes and permissions**
+- `POST /api/auth/register` — Register a new usser (`name`, `email`, `password`, `role`)
+- `POST /api/auth/login` — Login -> return `token`
 
-Nota: todas las rutas bajo `/api` requieren el header `Authorization: Bearer <token>` salvo `/api/auth/*`.
+Note: all routs wiht `/api` it required the header `Authorization: Bearer <token>` except `/api/auth/*`.
 
-- Clientes
-	- `GET /api/clients` — Listar clientes (auth required)
-	- `POST /api/clients/search` — Buscar por `cedula` (auth required)
-	- `POST /api/clients` — Crear cliente (admin)
+- Clients
+	- `GET /api/clients` — Client list (auth required)
+	- `POST /api/clients/search` — Find by `cedula` (auth required)
+	- `POST /api/clients` — Create client (admin)
 
-- Bodegas
-	- `GET /api/warehouses` — Listar bodegas activas con su stock (auth required)
-	- `PATCH /api/warehouses/:id/active` — Activar/Inactivar (admin)
+- warehouses
+	- `GET /api/warehouses` — warehoueses list with that stock (auth required)
+	- `PATCH /api/warehouses/:id/active` — Activate/Inactivate (admin)
 
-- Productos
-	- `GET /api/products/:code` — Obtener por código (auth required)
-	- `DELETE /api/products/:id` — Eliminación lógica (admin)
+- Products
+	- `GET /api/products/:code` — get products by ID (auth required)
+	- `DELETE /api/products/:id` — Delete products (admin)
 
-- Órdenes
-	- `POST /api/orders` — Crear orden (admin). Body: `{ clientId, warehouseId, items: [{productId, quantity}] }`
-		- Valida: cliente existe, bodega activa, producto en la bodega y stock suficiente.
-	- `PATCH /api/orders/:id/status` — Cambiar estado (admin, analyst). Body: `{ status: 'pending'|'in_transit'|'delivered' }`
-	- `GET /api/orders/history` — Historial de órdenes (auth required)
-	- `GET /api/orders/client/:clientId` — Órdenes por cliente (auth required)
+- Órders
+	- `POST /api/orders` — Create order (admin). Body: `{ clientId, warehouseId, items: [{productId, quantity}] }`
+		- Validate: existent client, active warehouse, warehouse products and aviable stock.
+	- `PATCH /api/orders/:id/status` — Change status (admin, analyst). Body: `{ status: 'pending'|'in_transit'|'delivered' }`
+	- `GET /api/orders/history` — Order History(auth required)
+	- `GET /api/orders/client/:clientId` — Órder by client (auth required)
 
-**Ejemplos rápidos (curl)**
+**Quick examples (curl)**
 
-Registrar usuario (ejemplo admin):
+Create a new user (admin example):
 
 ```bash
 curl -X POST http://localhost:3000/api/auth/register \
@@ -222,14 +211,14 @@ curl -X POST http://localhost:3000/api/auth/login \
 	-d '{"email":"admin@fhl.com","password":"password123"}'
 ```
 
-Usar token en peticiones protegidas:
+Use token in safe querys:
 
 ```bash
 curl http://localhost:3000/api/clients \
 	-H "Authorization: Bearer <TOKEN>"
 ```
 
-Crear una orden (admin):
+Create an order (admin):
 
 ```bash
 curl -X POST http://localhost:3000/api/orders \
@@ -238,14 +227,10 @@ curl -X POST http://localhost:3000/api/orders \
 	-d '{"clientId":1,"warehouseId":1,"items":[{"productId":1,"quantity":2}] }'
 ```
 
-**Validaciones de negocio implementadas**
-- No crear órdenes si no hay stock suficiente en la bodega seleccionada.
-- No registrar clientes con la misma cédula (único).
-- Solo administradores pueden crear/editar recursos CRUD completos; analistas pueden actualizar el estado de órdenes y consultar.
-
-**Gitflow y commits convencionales**
-- Branches: `main`, `develop`, `feature/<desc>`.
-- Mensajes de commit: usar Conventional Commits, por ejemplo: `feat(clients): add search by cedula` o `fix(orders): validate stock before create`.
+**Validations for busyness**
+- not create orders if don't have avaibale stock in the werehouese for this order.
+- Dont registera more of one user with the same cedula (unique).
+- Only the administrator can create/edit  completely CRUD resources; analyst can be update the orders status and read.
 
 
 **Contacto / Autor**
@@ -254,22 +239,13 @@ curl -X POST http://localhost:3000/api/orders \
 
 **Dump SQL para Moodle**
 
-El entregable para Moodle debe incluir un volcado SQL (`.sql`) con la estructura y datos usados en la prueba. Hay dos opciones recomendadas:
-
-- Generar el volcado desde el host con `pg_dump` (si la base de datos está en Docker o local). Ejemplo:
-
+Dump file is in dump folder, wiht the name FHLDATABASE.sql; whit the database for all the dates.
 ```bash
-# Dump en formato SQL plano (recomendado para Moodle)
+# Dump  
 pg_dump -h localhost -p 5434 -U postgres -d fhldb > moodle_dump/fhldb.sql
 
-# o con puerto por defecto 5432
+# or with default port 5432
 pg_dump -h localhost -p 5432 -U postgres -d fhldb > moodle_dump/fhldb.sql
 ```
 
-- Usar el script incluido (`npm run dump`) que invoca `pg_dump` usando `DATABASE_URL` de tu `.env` y escribe `moodle_dump/fhldb.sql`.
-
-Notas:
-- Asegúrate de que la base de datos que estés volcándo contiene los datos del `seed` (ejecuta `npm run seed` primero si corresponde).
-- Incluye el archivo resultante `moodle_dump/fhldb.sql` en el ZIP/subida a Moodle.
-
-La carpeta `moodle_dump/` se usa por convención para almacenar el volcado listo para subir.
+- Using scripts (`npm run dump`) to make `pg_dump` using `DATABASE_URL` of your `.env` and write `moodle_dump/fhldb.sql`.
