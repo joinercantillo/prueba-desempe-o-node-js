@@ -8,14 +8,14 @@ const router = Router();
  * @openapi
  * /api/clients:
  *   get:
- *     summary: Listar clientes
+ *     summary: Client list
  *     tags:
  *       - Clients
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Lista de clientes
+ *         description: Client
  */
 // List all clients (protected)
 router.get('/', authenticate, async (req, res) => {
@@ -27,7 +27,7 @@ router.get('/', authenticate, async (req, res) => {
  * @openapi
  * /api/clients/search:
  *   post:
- *     summary: Buscar cliente por cédula
+ *     summary: Find client by Cedula
  *     tags:
  *       - Clients
  *     security:
@@ -43,9 +43,9 @@ router.get('/', authenticate, async (req, res) => {
  *                 type: string
  *     responses:
  *       200:
- *         description: Cliente encontrado
+ *         description: found client
  *       404:
- *         description: No encontrado
+ *         description: Not found
  */
 // Find client by cedula
 router.post('/search', authenticate, async (req, res) => {
@@ -60,7 +60,7 @@ router.post('/search', authenticate, async (req, res) => {
  * @openapi
  * /api/clients:
  *   post:
- *     summary: Crear cliente (admin)
+ *     summary: Create a new client (admin functions)
  *     tags:
  *       - Clients
  *     security:
@@ -80,7 +80,7 @@ router.post('/search', authenticate, async (req, res) => {
  *                 type: string
  *     responses:
  *       201:
- *         description: Cliente creado
+ *         description: Client created
  */
 // Admin: create client
 router.post('/', authenticate, async (req, res) => {

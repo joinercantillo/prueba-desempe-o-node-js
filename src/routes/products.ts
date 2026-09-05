@@ -8,7 +8,7 @@ const router = Router();
  * @openapi
  * /api/products/{code}:
  *   get:
- *     summary: Obtener producto por código
+ *     summary: Find prodcut by code
  *     tags:
  *       - Products
  *     security:
@@ -21,9 +21,9 @@ const router = Router();
  *           type: string
  *     responses:
  *       200:
- *         description: Producto
+ *         description: Product
  *       404:
- *         description: No encontrado
+ *         description: Not found
  */
 // Get product by code
 router.get('/:code', authenticate, async (req, res) => {
@@ -36,7 +36,7 @@ router.get('/:code', authenticate, async (req, res) => {
  * @openapi
  * /api/products/{id}:
  *   delete:
- *     summary: Eliminación lógica de producto (admin)
+ *     summary: delete product (admin)
  *     tags:
  *       - Products
  *     security:
@@ -49,9 +49,9 @@ router.get('/:code', authenticate, async (req, res) => {
  *           type: integer
  *     responses:
  *       204:
- *         description: Eliminado
+ *         description: deteted
  *       404:
- *         description: No encontrado
+ *         description: Not found
  */
 // Logical delete (soft delete) - admin
 router.delete('/:id', authenticate, authorize(['admin']), async (req, res) => {

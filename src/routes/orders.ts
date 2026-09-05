@@ -12,7 +12,7 @@ const router = Router();
  * @openapi
  * /api/orders:
  *   post:
- *     summary: Crear una orden (admin)
+ *     summary: Create and order (admin)
  *     tags:
  *       - Orders
  *     security:
@@ -39,9 +39,9 @@ const router = Router();
  *                       type: integer
  *     responses:
  *       201:
- *         description: Orden creada
+ *         description: Order created
  *       400:
- *         description: Datos inválidos
+ *         description: Invalid data
  */
 // Create order
 router.post('/', authenticate, authorize(['admin']), async (req, res) => {
@@ -78,7 +78,7 @@ router.post('/', authenticate, authorize(['admin']), async (req, res) => {
  * @openapi
  * /api/orders/{id}/status:
  *   patch:
- *     summary: Cambiar estado de la orden (admin, analyst)
+ *     summary: Change the order status (admin and analyst functions)
  *     tags:
  *       - Orders
  *     security:
@@ -101,9 +101,9 @@ router.post('/', authenticate, authorize(['admin']), async (req, res) => {
  *                 enum: [pending, in_transit, delivered]
  *     responses:
  *       200:
- *         description: Orden actualizada
+ *         description: Order updated
  *       404:
- *         description: No encontrada
+ *         description: Not found
  */
 // Change order status (admin + analyst can update status)
 router.patch('/:id/status', authenticate, authorize(['admin', 'analyst']), async (req, res) => {
@@ -121,14 +121,14 @@ router.patch('/:id/status', authenticate, authorize(['admin', 'analyst']), async
  * @openapi
  * /api/orders/history:
  *   get:
- *     summary: Historial de órdenes
+ *     summary: Order history
  *     tags:
  *       - Orders
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Lista de órdenes
+ *         description: Order list
  */
 // Get history of orders
 router.get('/history', authenticate, async (req, res) => {
@@ -140,7 +140,7 @@ router.get('/history', authenticate, async (req, res) => {
  * @openapi
  * /api/orders/client/{clientId}:
  *   get:
- *     summary: Órdenes por cliente
+ *     summary: Order by client
  *     tags:
  *       - Orders
  *     security:
@@ -153,7 +153,7 @@ router.get('/history', authenticate, async (req, res) => {
  *           type: integer
  *     responses:
  *       200:
- *         description: Lista de órdenes del cliente
+ *         description: Client order list
  */
 // Get orders by client
 router.get('/client/:clientId', authenticate, async (req, res) => {

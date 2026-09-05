@@ -9,7 +9,7 @@ const router = Router();
  * @openapi
  * /api/auth/register:
  *   post:
- *     summary: Registrar un nuevo usuario
+ *     summary: Register a new user
  *     tags:
  *       - Auth
  *     requestBody:
@@ -29,9 +29,9 @@ const router = Router();
  *                 type: string
  *     responses:
  *       201:
- *         description: Usuario creado
+ *         description: User created correctly
  *       400:
- *         description: Campos inválidos/ faltantes
+ *         description: Invalid parameters
  */
 router.post('/register', async (req, res) => {
   const { name, email, password, role } = req.body;
@@ -49,7 +49,7 @@ router.post('/register', async (req, res) => {
  * @openapi
  * /api/auth/login:
  *   post:
- *     summary: Iniciar sesión y obtener token con JWT
+ *     summary: Login with JSON WEB TOKEN
  *     tags:
  *       - Auth
  *     requestBody:
@@ -67,7 +67,7 @@ router.post('/register', async (req, res) => {
  *       200:
  *         description: Token JWT
  *       401:
- *         description: Credenciales inválidas/faltantes
+ *         description: Invalid credentials
  */
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;

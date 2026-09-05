@@ -9,14 +9,14 @@ const router = Router();
  * @openapi
  * /api/warehouses:
  *   get:
- *     summary: Listar bodegas activas con stock
+ *     summary: Active warehouses list
  *     tags:
  *       - Warehouses
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Lista de bodegas con productos
+ *         description: Warehouses list with their products
  */
 // List active warehouses with stock
 router.get('/', authenticate, async (req, res) => {
@@ -35,7 +35,7 @@ router.get('/', authenticate, async (req, res) => {
  * @openapi
  * /api/warehouses/{id}/active:
  *   patch:
- *     summary: Activar o desactivar una bodega (admin)
+ *     summary: Active or desactive a warehouse (admin)
  *     tags:
  *       - Warehouses
  *     security:
@@ -57,9 +57,9 @@ router.get('/', authenticate, async (req, res) => {
  *                 type: boolean
  *     responses:
  *       200:
- *         description: Bodega actualizada
+ *         description: warehouse updated
  *       404:
- *         description: No encontrado
+ *         description: Not found
  */
 // Admin: activate/deactivate warehouse
 router.patch('/:id/active', authenticate, authorize(['admin']), async (req, res) => {

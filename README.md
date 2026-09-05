@@ -2,7 +2,7 @@
 
 API REST for the managment of delivery orders prueba de desempeño nodeJs - Cohorte 5
 
-**Resumen**: This API allows to register clients, gestionar warehouses and products, make delivery orders, asing to a warehouses, controller the statatus and queryest the history for all clients. Autentication based on JWT with rols `admin` and `analyst`.
+**Resumen**: This API allows to register clients, managment warehouses and products, make delivery orders, asing to a warehouses, controller the statatus and queryest the history for all clients. Autentication based on JWT with rols `admin` and `analyst`.
 
 **Requuest**
 - Node.js >= 18
@@ -45,7 +45,6 @@ cd prueba_desempeño_nodejs
 npm install
 
 ```
-
 3) configure the enviroment variables:
 
 ```bash
@@ -99,10 +98,10 @@ npm run seed
 ```
 
 
-4) Inicializar y poblar la base de datos de desarrollo:
+4) initialize the database:
 
 ```bash
-# Ejecuta el seeder (recrea tablas y carga datos de ejemplo)
+# Execute the seeder 
 npm run seed
 ```
 
